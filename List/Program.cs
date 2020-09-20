@@ -1,6 +1,7 @@
 ﻿using List;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace List {
@@ -33,6 +34,7 @@ namespace List {
         }
 
         ~Node() {
+            Console.WriteLine("Dead node");
             _obj = default;
         }
     }
@@ -43,9 +45,8 @@ namespace List {
     /// </summary>
     /// <typeparam name="T">Clase roja o tipo de dato que implemente IEquatable e IComparable</typeparam>
     public class ListaOrdenada<T> where T : IEquatable<T>, IComparable<T> {
-
+        public delegate bool Condicion<in U>(U aT);
         private Node<T> head;
-
         /// <summary>
         /// Accesa a cualquier elemento de la lista.
         /// </summary>
@@ -61,14 +62,6 @@ namespace List {
                 while (i++ < index) currentNode = currentNode.NextNode;
                 return currentNode.Objeto;
             }
-            set {
-                if (EstaVacia || index >= Size)
-                    throw new IndexOutOfRangeException("No existe el indice indicado.");
-                var i = 0;
-                Node<T> currentNode = head;
-                    while (i++ < index) currentNode = currentNode.NextNode;
-                currentNode.Objeto = value;
-            }
         }
         /// <summary>
         /// Devuelve el tamaño de la lista
@@ -83,10 +76,32 @@ namespace List {
         public bool EstaVacia {
             get => head == null;
         }
-
+        public ListaOrdenada<T> RetornaSi(Condicion<T> condicion) {
+            ListaOrdenada<T> returnLista = new ListaOrdenada<T>();
+            foreach (T item in this) {
+                if (condicion.Invoke(item)) {
+                    returnLista.Agregar(item);
+                }
+            }
+            return returnLista;
+        }
         /// <summary>
         /// Limpia la lista y elimina todos los elementos
         /// </summary>
+        public void BorrarSi(Condicion<T> condicion) {
+            ForEach(v => {
+                if (condicion.Invoke(v)) {
+                    Borrar(v);
+                }
+            });
+        }
+        public void AgregarSi(Condicion<T> condicion, params T[] objs) {
+           foreach(T t in objs) {
+                if (condicion.Invoke(t)) {
+                    Agregar(t);
+                }
+            }
+        }
         public void Limpiar() {
             head = null;
             Size = 0;
@@ -111,28 +126,29 @@ namespace List {
         /// <param name="obj">El elemento que se desea borrar</param>
         /// <returns>El elemento borrado</returns>
         public T Borrar(T obj) {
-            if (EstaVacia)
-                throw new Exception("Lista vacia. No se puede borrar ningun elemento.");
-            Node<T> auxNode = head, prevNode = null;
-
-            while (auxNode != null) {
-                if (auxNode.Objeto.CompareTo(obj) == 1)
+            if (EstaVacia) throw new Exception("Lista vacia. No se puede borrar ningun elemento.");
+            Node<T> currentNode = head, previousNode = null;
+            while (currentNode != null) {
+                if (currentNode.Objeto.CompareTo(obj) == 1)
                     break;
-                if (auxNode.Objeto.Equals(obj)) {
-                    Node<T> ret = auxNode;
-
-                    if (prevNode != null) { //int
-                        prevNode.NextNode = auxNode.NextNode;
+                if (currentNode.Objeto.Equals(obj)) {
+                    if (previousNode != null) { //int
+                        previousNode.NextNode = currentNode.NextNode;
                     } else { //h
                         head = head.NextNode;
                     }
                     Size--;
-                    return ret.Objeto;
+                    return currentNode.Objeto;
                 }
-                prevNode = auxNode;
-                auxNode = auxNode.NextNode;
+                previousNode = currentNode;
+                currentNode = currentNode.NextNode;
             }
             throw new Exception("No se encontro el elemento a borrar");
+        }
+        public void Borrar(params T[] objs) {
+            foreach (T i in objs) {
+                Borrar(i);
+            }
         }
         /// <summary>
         /// Busca un elemento en la lista y lo devuelve si lo encontró.
@@ -215,80 +231,22 @@ namespace List {
         ~ListaOrdenada() {
             Limpiar();
         }
-
     }
 }
 
-class Persona : IEquatable<Persona>, IComparable<Persona> {
-        private string strNombre;
-        private int intEdad;
-
-        public Persona(string nombre, int edad) {
-            Edad = edad;
-            Nombre = nombre;
-        }
-
-        public override string ToString() {
-            return $"[{Nombre}] | {Edad}";
-        }
-
-        public bool Equals([DisallowNull] Persona other) {
-            return this.Nombre.Equals(other.Nombre) && this.Edad == other.Edad;
-        }
-
-        public int CompareTo([DisallowNull] Persona other) {
-            if (this.Nombre.CompareTo(other.Nombre) > 0) {
-                return 1;
-            }else if(this.Nombre.CompareTo(other.Nombre) < 0) {
-                return -1;
-            }
-
-            return 0;
-        }
-
-        public int Edad {
-            get {
-                return intEdad;
-            }
-            set {
-                intEdad = value;
-            }
-        }
-
-        public string Nombre {
-            get {
-                return strNombre;
-            }
-            set {
-                strNombre = value;
-            }
-        }
-
-    }
 
     class Program
     {
         static void Main(string[] args)
         {
 
+        var lista = new ListaOrdenada<double>();
 
-        ListaOrdenada<int> lista = new ListaOrdenada<int>();
-
-        try {
-        lista.Agregar(10, 20, 30, 50, 4 , 0);
-
-        lista.Borrar(50);
-
-        lista[3] = 5000;
-
-        lista.ForEach(Console.WriteLine);
-
-        } catch (Exception e) {
-
-            Console.WriteLine(e.Message);
-        }
+        lista.Borrar(10);
 
 
+        
+        
 
         Console.ReadKey();
 
