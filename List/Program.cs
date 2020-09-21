@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Generic_Class;
 
 namespace List {
 
@@ -240,16 +241,23 @@ namespace List {
         static void Main(string[] args)
         {
 
-        var lista = new ListaOrdenada<double>();
+        GenericClass claseGenerica = new GenericClass();
 
-        lista.Borrar(10);
+        claseGenerica.AddProperty(new Property("intEdad", 20));
+        claseGenerica.AddProperty(new Property("strNombre", "Alan Pena"));
+        claseGenerica.AddProperty(new Property("dblPeso", 90 ));
+        claseGenerica.AddProperty(new Property("chrSexo", 'M'));
+        claseGenerica.AddProperty(new Property("blnMayorDeEdad", claseGenerica.GetProperty
+            ("intEdad") >=18 ));
 
 
-        
-        
-
-        Console.ReadKey();
-
+        foreach(Property prop in claseGenerica) {
+            Console.WriteLine(prop.Value);
         }
+
+
+
+
     }
+}
 

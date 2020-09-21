@@ -11,3 +11,6 @@ C:\Users\alanc\source\repos\List\List\obj\Debug\netcoreapp3.1\List.csproj.CoreCo
 C:\Users\alanc\source\repos\List\List\obj\Debug\netcoreapp3.1\List.dll
 C:\Users\alanc\source\repos\List\List\obj\Debug\netcoreapp3.1\List.pdb
 C:\Users\alanc\source\repos\List\List\obj\Debug\netcoreapp3.1\List.genruntimeconfig.cache
+C:\Users\alanc\source\repos\List\List\bin\Debug\netcoreapp3.1\Generic Class.dll
+C:\Users\alanc\source\repos\List\List\bin\Debug\netcoreapp3.1\Generic Class.pdb
+C:\Users\alanc\source\repos\List\List\obj\Debug\netcoreapp3.1\List.csproj.CopyComplete

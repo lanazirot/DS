@@ -5,4 +5,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="Generic Class">
+      <HintPath>..\..\Generic Class\Generic Class\bin\Debug\netstandard2.0\Generic Class.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
